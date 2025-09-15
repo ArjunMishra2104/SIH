@@ -45,10 +45,10 @@ app.post('/api/profile', (req, res) => {
 // Endpoint to get a list of schemes
 app.get('/api/schemes', (req, res) => {
     const schemes = [
-        { name: "Pradhan Mantri Fasal Bima Yojana", description: "Crop insurance scheme for farmers." },
-        { name: "Paramparagat Krishi Vikas Yojana", description: "Scheme to promote organic farming." },
-        { name: "National Mission on Micro Irrigation", description: "Promotes efficient water use through micro-irrigation systems." },
-        { name: "Soil Health Card Scheme", description: "Provides soil health cards to farmers to improve productivity." }
+        { name: "Pradhan Mantri Fasal Bima Yojana", "description": "Crop insurance scheme for farmers." },
+        { name: "Paramparagat Krishi Vikas Yojana", "description": "Scheme to promote organic farming." },
+        { name: "National Mission on Micro Irrigation", "description": "Promotes efficient water use through micro-irrigation systems." },
+        { name: "Soil Health Card Scheme", "description": "Provides soil health cards to farmers to improve productivity." }
     ];
     res.status(200).json(schemes);
 });
