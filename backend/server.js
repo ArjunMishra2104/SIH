@@ -6,60 +6,39 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const users = [{username: "test", password: "123"}];
 
-app.post("/login", (req, res) => {
-    const { username, password } = req.body;
-    const user = users.find(
-        (u) => u.username === username && u.password === password
-    );
-
-    if(user){
-        res.json({ success: true, message: "Login Successfull"});
-    } else{
-        res.json({ success: false, message: "Invalid credentials"});
-    }
+app.post("/api/profile", (req, res) => {
+  const profile = req.body;
+  console.log("Received Farmer Profile:", profile);
+  res.json({ message: "✅ Farmer profile saved successfully!" });
 });
 
-app.post("/signup", (req, res) => {
-    const { username, password } = req.body;
-    const userExists = users.find((u) => u.username === username);
+// --- Chat API ---
+app.post("/api/chat", (req, res) => {
+  const { message } = req.body;
+  let reply = "Sorry, I didn't understand.";
 
-    if(userExists){
-        return res.json({ success: false, message : "user already exists"});
-    }
-
-    users.push({username, password});
-    res.json({ success: true, message : "Signup successful!"});
-});
-
-app.post("/change-password", (req, res) => {
-  const { username, oldPassword, newPassword } = req.body;
-  const user = users.find(
-    (u) => u.username === username && u.password === oldPassword
-  );
-
-  if (!user) {
-    return res.json({ success: false, message: "Invalid credentials" });
+  if (message.toLowerCase().includes("hello")) {
+    reply = "Hello! How can I help you with your farming today?";
+  } else if (message.toLowerCase().includes("weather")) {
+    reply = "🌧️ Heavy rain expected in Chittur today. Please take precautions.";
   }
 
-  user.password = newPassword;
-  res.json({ success: true, message: "Password updated successfully!" });
+  res.json({ reply });
 });
-app.post("/location", (req, res) => {
-  const { username, latitude, longitude } = req.body;
 
-  if (!username || !latitude || !longitude) {
-    return res.json({ success: false, message: "Missing data" });
-  }
-
-  // For now, just log and return it (later you can store in DB)
-  console.log(`Location of ${username}: ${latitude}, ${longitude}`);
-
-  res.json({ 
-    success: true, 
-    message: "Location received successfully", 
-    data: { username, latitude, longitude } 
-  });
+// --- Schemes API ---
+app.get("/api/schemes", (req, res) => {
+  const schemes = [
+    { title: "PM-Kisan", description: "₹6,000 yearly support to farmers.", eligibility: "All small/marginal farmers", category: "income", link: "#" },
+    { title: "PMFBY", description: "Crop insurance scheme.", eligibility: "All farmers with notified crops", category: "insurance", link: "#" },
+    { title: "SMAM", description: "Subsidy on tractors and equipment.", eligibility: "Individual farmers and groups", category: "subsidy", link: "#" }
+  ];
+  res.json(schemes);
 });
-app.listen(5000, () => console.log("Server running on https://localhost:5000"));
+
+// --- Start Server ---
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+});
