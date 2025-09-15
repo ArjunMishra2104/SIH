@@ -105,12 +105,12 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
 
             const profileData = {
-                name: document.getElementById('Full Name').value,
-                district: districtSelect.value,
-                village: villageSelect.value,
-                landSize: document.getElementById('Land Size(acres)').value,
-                crop: mainCropSelect.value,
-                soil: soilTypeSelect.value
+                name: document.getElementById('farmer-name').value,
+                district: document.getElementById('district-select').value,
+                village: document.getElementById('village-select').value,
+                landSize: document.getElementById('land-size').value,
+                crop: document.getElementById('main-crop').value,
+                soil: document.getElementById('soil-type').value
             };
 
             try {
