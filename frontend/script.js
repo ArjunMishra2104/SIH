@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // --- SAMPLE DATA (local, still used for dropdowns) ---
-    const locationData = {
+
+    // --- BACKEND API BASE URL ---
+    const API_BASE = "http://localhost:5000"; // 👈 backend runs separately
+
+    const locationData = { 
         "Alappuzha": { villages: ["Kayamkulam", "Cherthala", "Ambalapuzha", "Chengannur"], crop: "paddy", soil: "alluvial" },
         "Ernakulam": { villages: ["Kochi", "Aluva", "Muvattupuzha", "Kothamangalam"], crop: "coconut", soil: "laterite" },
         "Idukki": { villages: ["Thodupuzha", "Kattappana", "Adimali", "Munnar"], crop: "rubber", soil: "laterite" },
@@ -18,59 +21,32 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // --- DOM ELEMENTS ---
-    const langSelector = document.getElementById('lang-selector'),
-        fontButtons = document.querySelectorAll('.font-size-btn'),
-        root = document.documentElement,
-        districtSelect = document.getElementById('district-select'),
-        villageSelect = document.getElementById('village-select'),
-        locationStatus = document.getElementById('location-status'),
-        mainCropSelect = document.getElementById('main-crop'),
-        soilTypeSelect = document.getElementById('soil-type'),
-        filterButtons = document.querySelectorAll('.filter-btn'),
-        schemeContainer = document.getElementById('schemes-container'),
-        sendBtn = document.getElementById('send-btn'),
-        userInput = document.getElementById('user-input'),
-        chatBox = document.getElementById('chat-box');
+    const districtSelect = document.getElementById('district-select');
+    const villageSelect = document.getElementById('village-select');
+    const mainCropSelect = document.getElementById('main-crop');
+    const soilTypeSelect = document.getElementById('soil-type');
+    const profileForm = document.getElementById('farmer-profile-form'); // 👈 make sure your form has this ID
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
 
-    let currentLang = 'en';
-
-    // --- LANGUAGE & FONT ---
-    const translations = {
-        en: { chatPlaceholder: "Type a message...", chatGreeting: "Hello! I am Krishi Sakhi. How can I assist you today?", selectVillage: "Select Village", selectVillageFirst: "Select a district first" },
-        ml: { chatPlaceholder: "ഒരു സന്ദേശം ടൈപ്പ് ചെയ്യുക...", chatGreeting: "നമസ്കാരം! ഞാൻ കൃഷി സഖി. നിങ്ങൾക്ക് എന്ത് സഹായമാണ് വേണ്ടത്?", selectVillage: "ഗ്രാമം തിരഞ്ഞെടുക്കുക", selectVillageFirst: "ആദ്യം ഒരു ജില്ല തിരഞ്ഞെടുക്കുക" }
-    };
-
-    const setLanguage = (lang) => {
-        currentLang = lang;
-        userInput.placeholder = translations[lang].chatPlaceholder;
-        chatBox.innerHTML = '';
-        addMessage(translations[lang].chatGreeting, 'assistant');
-    };
-
-    const setFontSize = (size) => {
-        fontButtons.forEach(btn => btn.classList.remove('active'));
-        document.querySelector(`.font-size-btn[data-size="${size}"]`).classList.add('active');
-        root.style.fontSize = size === 'small' ? '14px' : size === 'medium' ? '16px' : '18px';
-    };
-
-    // --- VILLAGE POPULATION ---
+    // --- FUNCTIONS ---
     const populateVillages = (district) => {
-        villageSelect.innerHTML = `<option value="">${translations[currentLang].selectVillage}</option>`;
+        villageSelect.innerHTML = `<option value="">Select Village</option>`;
         if (district && locationData[district]) {
             locationData[district].villages.forEach(village => {
                 const option = document.createElement('option');
-                option.value = village.toLowerCase().replace(' ', '-');
+                option.value = village;
                 option.textContent = village;
                 villageSelect.appendChild(option);
             });
             villageSelect.disabled = false;
         } else {
-            villageSelect.innerHTML = `<option value="">${translations[currentLang].selectVillageFirst}</option>`;
+            villageSelect.innerHTML = `<option value="">Select a district first</option>`;
             villageSelect.disabled = true;
         }
     };
 
-    // --- CHAT MESSAGES ---
     const addMessage = (text, sender) => {
         const messageContainer = document.createElement('div');
         messageContainer.className = `message ${sender}-message`;
@@ -81,98 +57,73 @@ document.addEventListener('DOMContentLoaded', function () {
         chatBox.scrollTop = chatBox.scrollHeight;
     };
 
-    // --- CHAT HANDLER (connects to backend) ---
-    const handleSendMessage = async () => {
-        const text = userInput.value.trim();
-        if (!text) return;
-
-        addMessage(text, 'user');
-        userInput.value = '';
-
-        try {
-            const res = await fetch("http://localhost:5000/api/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: text })
-            });
-            const data = await res.json();
-            addMessage(data.reply, 'assistant');
-        } catch (err) {
-            addMessage("⚠️ Error connecting to server.", 'assistant');
-        }
+    const getBotResponse = (userText) => {
+        const lowerText = userText.toLowerCase();
+        if (lowerText.includes("hello")) return "Hello! How can I assist you with your farming questions today?";
+        if (lowerText.includes("weather")) return "Weather forecast is displayed in the alert banner.";
+        if (lowerText.includes("scheme")) return "Check the Schemes section for government schemes.";
+        return "I'm still learning. Please ask about weather, sowing time, or schemes.";
     };
 
-    // --- FARMER PROFILE HANDLER ---
-    document.getElementById('farmer-profile-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const profile = {
-            name: document.getElementById('farmer-name').value,
-            district: districtSelect.value,
-            village: villageSelect.value,
-            landSize: document.getElementById('land-size').value,
-            crop: mainCropSelect.value,
-            soil: soilTypeSelect.value
-        };
-
-        try {
-            const res = await fetch("http://localhost:5000/api/profile", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(profile)
-            });
-            const data = await res.json();
-            alert(data.message);
-        } catch (err) {
-            alert("Error saving profile: " + err.message);
-        }
-    });
-
-    // --- LOAD SCHEMES FROM BACKEND ---
-    const loadSchemes = async () => {
-        try {
-            const res = await fetch("http://localhost:5000/api/schemes");
-            const schemes = await res.json();
-
-            schemeContainer.innerHTML = '';
-            schemes.forEach(s => {
-                const card = document.createElement('div');
-                card.className = "scheme-card";
-                card.setAttribute("data-category", s.category);
-                card.innerHTML = `
-                    <h3>${s.title}</h3>
-                    <p>${s.description}</p>
-                    <p><strong>Eligibility:</strong> ${s.eligibility}</p>
-                    <a href="${s.link}" target="_blank">Learn More & Apply</a>
-                `;
-                schemeContainer.appendChild(card);
-            });
-        } catch (err) {
-            schemeContainer.innerHTML = "<p>⚠️ Failed to load schemes.</p>";
+    const handleSendMessage = () => {
+        const text = userInput.value.trim();
+        if (text) {
+            addMessage(text, 'user');
+            userInput.value = '';
+            setTimeout(() => addMessage(getBotResponse(text), 'assistant'), 1000);
         }
     };
 
     // --- EVENT LISTENERS ---
-    langSelector.addEventListener('change', (e) => setLanguage(e.target.value));
-    fontButtons.forEach(btn => btn.addEventListener('click', () => setFontSize(btn.getAttribute('data-size'))));
-    filterButtons.forEach(btn => btn.addEventListener('click', () => {
-        const filter = btn.getAttribute('data-filter');
-        document.querySelectorAll('.scheme-card').forEach(card => {
-            card.style.display = (filter === 'all' || card.getAttribute('data-category') === filter) ? 'block' : 'none';
-        });
-    }));
+    districtSelect.addEventListener('change', () => populateVillages(districtSelect.value));
     sendBtn.addEventListener('click', handleSendMessage);
     userInput.addEventListener('keypress', (e) => (e.key === 'Enter') && handleSendMessage());
-    districtSelect.addEventListener('change', () => populateVillages(districtSelect.value));
 
-    // --- INITIALIZE ---
-    Object.keys(locationData).forEach(district => {
-        const option = document.createElement('option');
-        option.value = district;
-        option.textContent = district;
-        districtSelect.appendChild(option);
-    });
-    setLanguage(langSelector.value);
-    setFontSize('medium');
-    loadSchemes();
+    // --- SUBMIT FARMER PROFILE TO BACKEND ---
+    if (profileForm) {
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const profileData = {
+                name: document.getElementById('name').value,
+                district: districtSelect.value,
+                village: villageSelect.value,
+                landSize: document.getElementById('land-size').value,
+                crop: mainCropSelect.value,
+                soil: soilTypeSelect.value
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/api/profile`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(profileData)
+                });
+
+                if (!res.ok) throw new Error("Failed to save profile");
+
+                const data = await res.json();
+                alert("✅ Profile saved successfully!");
+                console.log("Saved profile:", data);
+
+            } catch (error) {
+                console.error("Error saving profile:", error);
+                alert("❌ Failed to save profile. Please check backend.");
+            }
+        });
+    }
+
+    // --- LOAD SCHEMES FROM BACKEND ---
+    async function loadSchemes() {
+        try {
+            const res = await fetch(`${API_BASE}/api/schemes`);
+            const schemes = await res.json();
+            console.log("Schemes loaded:", schemes);
+            // TODO: show schemes in frontend cards
+        } catch (error) {
+            console.error("Error loading schemes:", error);
+        }
+    }
+
+    loadSchemes(); // 👈 call once page loads
 });

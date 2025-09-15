@@ -1,53 +1,49 @@
-// server.js
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
 
 const app = express();
 const PORT = 5000;
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
+// --- Middleware ---
+app.use(cors()); // allow frontend from another folder (different origin)
+app.use(express.json()); // parse JSON bodies
 
-// Dummy schemes data
-const schemes = [
-  {
-    title: "Pradhan Mantri Fasal Bima Yojana",
-    description: "Provides insurance coverage against crop failure.",
-    eligibility: "All farmers growing notified crops."
-  },
-  {
-    title: "PM-KISAN Scheme",
-    description: "Financial benefit of ₹6,000 per year for eligible farmer families.",
-    eligibility: "All landholding farmer families."
-  },
-  {
-    title: "Sub-Mission on Agricultural Mechanization",
-    description: "Subsidies on tractors and machinery.",
-    eligibility: "Individual farmers and groups."
-  }
-];
-
-// GET endpoint for schemes
-app.get("/api/schemes", (req, res) => {
-  res.json(schemes);
+// --- Routes ---
+app.get("/", (req, res) => {
+  res.send("✅ Backend is working!");
 });
 
-// POST endpoint for saving farmer profile
+// Save farmer profile
 app.post("/api/profile", (req, res) => {
-  console.log("📩 Farmer Profile Received:", req.body);
-  res.json({ message: "✅ Farmer profile saved successfully!" });
+  console.log("📩 Received farmer profile:", req.body);
+
+  // Here you would normally save to a database (MongoDB/MySQL/etc.)
+  // For now, we just send it back
+  res.json({
+    message: "✅ Profile saved successfully!",
+    profile: req.body,
+  });
 });
 
-// POST endpoint for chat
-app.post("/api/chat", (req, res) => {
-  const { message } = req.body;
-  console.log("💬 User asked:", message);
-  res.json({ reply: `AI Assistant: You said "${message}"` });
+// Get schemes list
+app.get("/api/schemes", (req, res) => {
+  res.json([
+    {
+      title: "PM-KISAN",
+      description: "Income support of ₹6,000 per year to farmers.",
+    },
+    {
+      title: "PMFBY",
+      description: "Crop insurance scheme for protection against crop loss.",
+    },
+    {
+      title: "SMAM",
+      description: "Subsidy on tractors and farming equipment.",
+    },
+  ]);
 });
 
-// Start server
+// --- Start server ---
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
