@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krishi Sakhi - AI Farming Assistant</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="header-top">
+            <div class="logo-container">
+                <img src="https://pmfby.gov.in/assets/images/emblem-dark.png" alt="Government of India Emblem"
+                    class="emblem">
+                <div class="logo-text">
+                    <span data-key="gov">Government of India</span>
+                    <span data-key="ministry">Ministry of Agriculture & Farmers Welfare</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="accessibility-controls">
+                    <span data-key="fontSize">Font Size:</span>
+                    <button class="font-size-btn" data-size="small">A-</button>
+                    <button class="font-size-btn active" data-size="medium">A</button>
+                    <button class="font-size-btn" data-size="large">A+</button>
+                </div>
+                <select id="lang-selector" class="lang-selector">
+                    <option value="en">English</option>
+                    <option value="ml">മലയാളം</option>
+                </select>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <div class="nav-brand">
+                <h1>कृषि सखी (Krishi Sakhi)</h1>
+                <p data-key="tagline">Your Personal AI Farming Assistant</p>
+            </div>
+            <ul>
+                <li><a href="#home" class="active" data-key="navHome">Home</a></li>
+                <li><a href="#schemes" data-key="navSchemes">Schemes</a></li>
+                <li><a href="#profile" data-key="navProfile">Farmer Profile</a></li>
+                <li><a href="#chat" data-key="navChat">Chat Assistant</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- MOVING ALERT BANNER -->
+    <div id="alert-banner">
+        <p><i class="fas fa-exclamation-triangle"></i> <span data-key="alertText">Important Alert: Heavy rain expected
+                in Chittur today. Please take necessary precautions.</span></p>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h2 data-key="heroTitle">Empowering Kerala's Farmers with Personalised AI Guidance</h2>
+                <p data-key="heroSubtitle">Explore government schemes, get timely advice, and track your farm activities
+                    to increase your yield.</p>
+                <a href="#profile" class="btn btn-primary" data-key="heroButton">Create Your Farm Profile</a>
+            </div>
+        </section>
+
+        <!-- Government Schemes Section -->
+        <section id="schemes" class="schemes-section">
+            <div class="container">
+                <h2 class="section-title" data-key="schemesTitle">Government Schemes & Yojana</h2>
+                <p class="section-subtitle" data-key="schemesSubtitle">Find schemes relevant to your needs. Click a
+                    category to filter.</p>
+                <div class="scheme-filters">
+                    <button class="filter-btn active" data-filter="all" data-key="schemeFilterAll">All Schemes</button>
+                    <button class="filter-btn" data-filter="crop-insurance" data-key="schemeFilterInsurance">Crop
+                        Insurance</button>
+                    <button class="filter-btn" data-filter="subsidy" data-key="schemeFilterSubsidy">Subsidy</button>
+                    <button class="filter-btn" data-filter="income-support" data-key="schemeFilterIncome">Income
+                        Support</button>
+                </div>
+                <div class="schemes-grid">
+                    <div class="scheme-card" data-category="crop-insurance">
+                        <h3 data-key="pmfbyTitle">Pradhan Mantri Fasal Bima Yojana</h3>
+                        <p data-key="pmfbyDesc">Provides comprehensive insurance coverage against crop failure.</p>
+                        <div class="scheme-details"><strong data-key="schemeEligibility">Eligibility:</strong> <span
+                                data-key="pmfbyEligibility">All farmers growing notified crops.</span></div><a href="#"
+                            class="btn-scheme" data-key="schemeApply">Learn More & Apply</a>
+                    </div>
+                    <div class="scheme-card" data-category="income-support">
+                        <h3 data-key="pmkisanTitle">PM-KISAN Scheme</h3>
+                        <p data-key="pmkisanDesc">Financial benefit of ₹6,000 per year for eligible farmer families.</p>
+                        <div class="scheme-details"><strong data-key="schemeEligibility">Eligibility:</strong> <span
+                                data-key="pmkisanEligibility">All landholding farmer families.</span></div><a href="#"
+                            class="btn-scheme" data-key="schemeApply">Learn More & Apply</a>
+                    </div>
+                    <div class="scheme-card" data-category="subsidy">
+                        <h3 data-key="smamTitle">Sub-Mission on Agricultural Mechanization</h3>
+                        <p data-key="smamDesc">Subsidies on tractors and other agricultural machinery.</p>
+                        <div class="scheme-details"><strong data-key="schemeEligibility">Eligibility:</strong> <span
+                                data-key="smamEligibility">Individual farmers and groups.</span></div><a href="#"
+                            class="btn-scheme" data-key="schemeApply">Learn More & Apply</a>
+                    </div>
+                    <div class="scheme-card" data-category="subsidy">
+                        <h3 data-key="nhmTitle">National Horticulture Mission (NHM)</h3>
+                        <p data-key="nhmDesc">Subsidies for growing fruits, vegetables, and horticultural crops.</p>
+                        <div class="scheme-details"><strong data-key="schemeEligibility">Eligibility:</strong> <span
+                                data-key="nhmEligibility">Farmers in horticulture.</span></div><a href="#"
+                            class="btn-scheme" data-key="schemeApply">Learn More & Apply</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Farmer Profile Section -->
+        <section id="profile" class="form-section">
+            <div class="container">
+                <h2 class="section-title" data-key="profileTitle">Create Your Farmer & Farm Profile</h2>
+                <p class="section-subtitle" data-key="profileSubtitle">Provide your details to get started with
+                    personalized advisories.</p>
+                <form id="farmer-profile-form">
+                    <div class="form-grid">
+                        <div class="form-group"><label for="farmer-name" data-key="formName">Full Name</label><input
+                                type="text" id="farmer-name" required></div>
+                        <div class="form-group">
+                            <label for="district-select" data-key="formDistrict">District (Click to auto-detect)</label>
+                            <select id="district-select" required>
+                                <option value="" data-key="selectDistrict">Select District</option>
+                            </select>
+                            <span id="location-status"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="village-select" data-key="formVillage">Village / Town</label>
+                            <select id="village-select" required disabled>
+                                <option value="" data-key="selectVillageFirst">Select a district first</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label for="land-size" data-key="formLandSize">Land Size
+                                (Acres)</label><input type="number" id="land-size" step="0.1" required></div>
+                        <div class="form-group"><label for="main-crop" data-key="formCrop">Primary Crop</label><select
+                                id="main-crop" required>
+                                <option value="" data-key="selectCrop">Select Crop</option>
+                                <option value="paddy" data-key="cropPaddy">Paddy (Rice)</option>
+                                <option value="coconut" data-key="cropCoconut">Coconut</option>
+                                <option value="rubber" data-key="cropRubber">Rubber</option>
+                                <option value="banana" data-key="cropBanana">Banana</option>
+                            </select></div>
+                        <div class="form-group"><label for="soil-type" data-key="formSoil">Soil Type</label><select
+                                id="soil-type" required>
+                                <option value="" data-key="selectSoil">Select Soil Type</option>
+                                <option value="alluvial" data-key="soilAlluvial">Alluvial</option>
+                                <option value="laterite" data-key="soilLaterite">Laterite</option>
+                                <option value="clayey" data-key="soilClayey">Clayey</option>
+                            </select></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-key="formButton">Save Profile</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Conversational Interface Section -->
+        <section id="chat" class="chat-section">
+            <div class="container">
+                <h2 class="section-title" data-key="chatTitle">Your Digital Companion</h2>
+                <p class="section-subtitle" data-key="chatSubtitle">Ask questions or log your activities in Malayalam.
+                </p>
+                <div class="chat-container">
+                    <div class="chat-box" id="chat-box"></div>
+                    <div class="chat-input">
+                        <input type="text" id="user-input">
+                        <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+                        <button id="voice-btn"><i class="fas fa-microphone"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left"><img src="https://pmfby.gov.in/assets/images/pmfby_logo_en.png" alt="PMFBY Logo"
+                    class="footer-logo" style="height:40px">
+                <p data-key="footerDesc">Krishi Sakhi is an AI-powered initiative to support farmers.</p>
+            </div>
+            <div class="footer-right">
+                <h3 data-key="footerLinks">Quick Links</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact Support</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Ministry of Agriculture & Farmers Welfare, Government of India.</p>
+        </div>
+    </footer>
+</body>
+<script src="script.js"></script>
+
+</html>
