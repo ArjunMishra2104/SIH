@@ -15,8 +15,7 @@ app.post("/api/profile", (req, res) => {
     const profile = req.body;
     console.log("✅ Profile received:", profile);
 
-    // Here you could save data to a database (MongoDB, MySQL, etc.)
-    // For now, just return success
+    
     res.status(200).json({
       success: true,
       message: "Profile saved successfully",
