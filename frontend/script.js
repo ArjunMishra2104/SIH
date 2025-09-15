@@ -25,12 +25,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const villageSelect = document.getElementById('village-select');
     const mainCropSelect = document.getElementById('main-crop');
     const soilTypeSelect = document.getElementById('soil-type');
-    const profileForm = document.getElementById('farmer-profile-form'); // 👈 make sure your form has this ID
+    const profileForm = document.getElementById('farmer-profile-form');
     const chatBox = document.getElementById('chat-box');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
 
     // --- FUNCTIONS ---
+    
+    // NEW FUNCTION: Populate the District dropdown
+    const populateDistricts = () => {
+        districtSelect.innerHTML = `<option value="">Select District</option>`; 
+        Object.keys(locationData).forEach(district => {
+            const option = document.createElement('option');
+            option.value = district;
+            option.textContent = district;
+            districtSelect.appendChild(option);
+        });
+    };
+
     const populateVillages = (district) => {
         villageSelect.innerHTML = `<option value="">Select Village</option>`;
         if (district && locationData[district]) {
@@ -75,7 +87,15 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // --- EVENT LISTENERS ---
-    districtSelect.addEventListener('change', () => populateVillages(districtSelect.value));
+    districtSelect.addEventListener('change', () => {
+        populateVillages(districtSelect.value);
+        // Also update crop and soil based on the selected district
+        if (locationData[districtSelect.value]) {
+            mainCropSelect.value = locationData[districtSelect.value].crop;
+            soilTypeSelect.value = locationData[districtSelect.value].soil;
+        }
+    });
+
     sendBtn.addEventListener('click', handleSendMessage);
     userInput.addEventListener('keypress', (e) => (e.key === 'Enter') && handleSendMessage());
 
@@ -125,5 +145,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    loadSchemes(); // 👈 call once page loads
+    // --- INITIALIZATION ---
+    populateDistricts(); // <-- This line is the key fix
+    populateVillages(districtSelect.value); // This will initially set the village dropdown as "Select a district first"
+    loadSchemes(); 
 });
