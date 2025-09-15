@@ -105,10 +105,10 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
 
             const profileData = {
-                name: document.getElementById('name').value,
+                name: document.getElementById('Full Name').value,
                 district: districtSelect.value,
                 village: villageSelect.value,
-                landSize: document.getElementById('land-size').value,
+                landSize: document.getElementById('Land Size(acres)').value,
                 crop: mainCropSelect.value,
                 soil: soilTypeSelect.value
             };
