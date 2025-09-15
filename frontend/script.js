@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     // --- BACKEND API BASE URL ---
-    const API_BASE = "http://localhost:5000"; // 👈 backend runs separately
+    const API_BASE = "http://solid-doodle-xxxxx-5000.app.github.dev"; // 👈 backend runs separately
 
     const locationData = { 
         "Alappuzha": { villages: ["Kayamkulam", "Cherthala", "Ambalapuzha", "Chengannur"], crop: "paddy", soil: "alluvial" },
